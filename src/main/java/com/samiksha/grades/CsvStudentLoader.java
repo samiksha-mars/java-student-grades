@@ -10,9 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Parses a CSV whose header is {@code name,<subject1>,<subject2>,...} and whose rows hold
@@ -59,6 +61,7 @@ public final class CsvStudentLoader {
                     if (header.length < 2) {
                         throw new CsvFormatException(lineNumber, "header needs a name column and at least one subject");
                     }
+                    validateSubjects(header, lineNumber);
                     continue;
                 }
                 students.add(parseRow(header, cells, lineNumber));
@@ -69,6 +72,19 @@ public final class CsvStudentLoader {
             return students;
         } catch (IOException e) {
             throw new UncheckedIOException(e);
+        }
+    }
+
+    private static void validateSubjects(String[] header, int lineNumber) {
+        Set<String> seen = new HashSet<>();
+        for (int i = 1; i < header.length; i++) {
+            String subject = header[i].strip();
+            if (subject.isEmpty()) {
+                throw new CsvFormatException(lineNumber, "subject name in column " + (i + 1) + " is blank");
+            }
+            if (!seen.add(subject)) {
+                throw new CsvFormatException(lineNumber, "duplicate subject column '" + subject + "'");
+            }
         }
     }
 

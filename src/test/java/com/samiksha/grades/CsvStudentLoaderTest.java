@@ -58,6 +58,21 @@ class CsvStudentLoaderTest {
     }
 
     @Test
+    void rejectsDuplicateSubjectColumns() {
+        String csv = "name,math, math\nAlice,10,90\n";
+        CsvFormatException e = assertThrows(CsvFormatException.class,
+                () -> CsvStudentLoader.load(new StringReader(csv)));
+        assertEquals(1, e.getLineNumber());
+        assertTrue(e.getMessage().contains("duplicate subject column 'math'"));
+    }
+
+    @Test
+    void rejectsBlankSubjectColumn() {
+        String csv = "name,,science\nAlice,10,90\n";
+        assertThrows(CsvFormatException.class, () -> CsvStudentLoader.load(new StringReader(csv)));
+    }
+
+    @Test
     void rejectsEmptyInput() {
         assertThrows(CsvFormatException.class, () -> CsvStudentLoader.load(new StringReader("\n\n")));
     }

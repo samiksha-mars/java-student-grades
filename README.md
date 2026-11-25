@@ -12,7 +12,7 @@ external dependencies at runtime.
 - Class statistics: mean, median, highest and lowest average, and grade distribution
 - Report sorted from highest to lowest average
 - Clear errors with line numbers for malformed CSV (bad numbers, wrong column count,
-  scores outside 0-100)
+  scores outside 0-100, blank or duplicate subject columns)
 
 ## Tech Stack
 
