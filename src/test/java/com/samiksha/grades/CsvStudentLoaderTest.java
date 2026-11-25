@@ -50,6 +50,14 @@ class CsvStudentLoaderTest {
     }
 
     @Test
+    void rejectsNaNScoreWithLineNumber() {
+        String csv = "name,math\nAlice,90\nBob,NaN\n";
+        CsvFormatException e = assertThrows(CsvFormatException.class,
+                () -> CsvStudentLoader.load(new StringReader(csv)));
+        assertEquals(3, e.getLineNumber());
+    }
+
+    @Test
     void rejectsEmptyInput() {
         assertThrows(CsvFormatException.class, () -> CsvStudentLoader.load(new StringReader("\n\n")));
     }

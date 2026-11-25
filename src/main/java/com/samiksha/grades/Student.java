@@ -17,7 +17,7 @@ public record Student(String name, Map<String, Double> scores) {
             throw new IllegalArgumentException("Student " + name + " has no scores");
         }
         scores.forEach((subject, score) -> {
-            if (score == null || score < 0 || score > 100) {
+            if (score == null || !(score >= 0 && score <= 100)) { // also rejects NaN
                 throw new IllegalArgumentException(
                         "Score for " + name + " in " + subject + " must be between 0 and 100: " + score);
             }

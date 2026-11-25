@@ -19,6 +19,7 @@ class StudentTest {
     void rejectsScoresOutsideRange() {
         assertThrows(IllegalArgumentException.class, () -> new Student("Bob", Map.of("math", 101.0)));
         assertThrows(IllegalArgumentException.class, () -> new Student("Bob", Map.of("math", -1.0)));
+        assertThrows(IllegalArgumentException.class, () -> new Student("Bob", Map.of("math", Double.NaN)));
     }
 
     @Test
